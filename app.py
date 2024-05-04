@@ -21,10 +21,12 @@ def register():
     if user_col.find_one({"Email": email}):
         return jsonify({"error": "Email already exists"}), 409
 
+    user_id = get_next_user_id()
     hashed_password = generate_password_hash(password)
     user_data = {
-        "email": email,
-        "password": hashed_password
+        "UserID": user_id,
+        "Email": email,
+        "Password": hashed_password
     }
     user_col.insert_one(user_data)
     return jsonify({"message": "User registered successfully!"}), 201
@@ -59,8 +61,16 @@ def nearby_toilet():
     }
     nearby_restroom = restroom_col.find(query, {"_id": False}).limit(10)
     result = list(nearby_restroom)
+    for r in result:
+        if not r.get('Rating'):
+            r['Rating'] = 0
+            r['RatingCount'] = 0
     return jsonify(result)
 
+def get_next_user_id():
+    counters = db['Counters']
+    result = counters.find_one_and_update({'Name': 'UserID'}, {'$inc': {'Seq': 1}}, return_document=True)
+    return result['Seq']
 
 
 if __name__ == "__main__":
