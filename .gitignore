@@ -1,0 +1,5 @@
+
+.env
+.idea/FindPublicToilet.iml
+*.xml
+auth/__pycache__/routes.cpython-38.pyc
