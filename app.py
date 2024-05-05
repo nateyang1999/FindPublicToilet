@@ -35,7 +35,7 @@ def register():
 def login():
     email = request.json['email']
     password = request.json['password']
-    user = user_col.find_one({"email": email}, {"_id": False})
+    user = user_col.find_one({"Email": email}, {"_id": False})
 
     if user and check_password_hash(user['Password'], password):
         access_token = create_access_token(identity=email)
