@@ -9,7 +9,7 @@ app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 jwt = JWTManager(app)
 # Setup MongoDB connection
 mc = MongoClient(os.getenv('DATABASE_URL'))
-db = mc["FindPublicToilet"]
+db = mc[os.getenv('DB_NAME')]
 user_col = db["UserAccount"]
 restroom_col = db["RestroomInfo"]
 
