@@ -123,6 +123,16 @@ def get_next_user_id():
     result = counters.find_one_and_update({'Name': 'UserID'}, {'$inc': {'Seq': 1}}, return_document=True)
     return result['Seq']
 
+@app.route('/has_rated/<int:restroom_id>', methods=['GET'])
+@jwt_required()
+def has_rated(restroom_id):
+    user_id = get_jwt_identity()
+    existing_rating = rating_col.find_one({"UserID": user_id, "RestroomID": restroom_id})
+    if existing_rating:
+        return jsonify({"HasRated": True}), 200
+    else:
+        return jsonify({"HasRated": False}), 200
+
 
 if __name__ == "__main__":
     app.run(debug=True)
